@@ -59,14 +59,14 @@ uint8_t generate_sample(uint16_t vmin, uint16_t vampl, uint8_t waveType, uint16_
 
 	switch(waveType){
 
-		case (BIOZAP_USR): 	generate_sin_sample (_v_min, _v_max, *sample_array); break; //TODO: User sample as in
+		case (BIOZAP_USR): 	return generate_sin_sample (_v_min, _v_max, sample_array); break; //TODO: User sample as in
 
-		case (BIOZAP_REC): 	generate_rec_sample (_v_min, _v_max, sample_array); break;
+		case (BIOZAP_REC): 	return generate_rec_sample (_v_min, _v_max, sample_array); break;
 
-		case (BIOZAP_SAW): 	generate_saw_sample (_v_min, _v_max, sample_array); break;
+		case (BIOZAP_SAW): 	return generate_saw_sample (_v_min, _v_max, sample_array); break;
 
 		//(BIOZAP_SIN) default
-		default:			return generate_sin_sample (_v_min, _v_max, sample_array);
+		default:	return generate_sin_sample (_v_min, _v_max, sample_array);
 
 	}
 
