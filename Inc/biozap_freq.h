@@ -15,7 +15,7 @@
 
 
 #define PI 3.14159265
-#define BIOZAP_SAMPLE_SIZE 512
+#define BIOZAP_SAMPLE_SIZE 512	// 12bit sample (0-4095) size
 #define BIOZAP_ONE_VOLT 349.24  // Divider 12k/4.7k with AD811 OpAmp equals 1V = 349.24 bits  or 1bit = 0.0028634V
 #define BIOZAP_VMIN_MAX 400		// 4.00 V
 #define BIOZAP_VMAX_MAX 1100	// 11.00 V
@@ -31,8 +31,8 @@
 
 
 //Global variables
-uint16_t bioZAP_SampleArray[ BIOZAP_SAMPLE_SIZE ]; //One period sample array
-uint16_t bioZAP_DutyCycle = 50;
+uint16_t BIOZAP_SampleArray[ BIOZAP_SAMPLE_SIZE ]; //One period sample array
+uint16_t BIOZAP_DutyCycle = 50;
 
 
 static uint8_t generate_sin_sample (uint16_t v_min, uint16_t v_max, uint16_t *sample_array);
@@ -46,13 +46,12 @@ uint8_t generate_sample(uint16_t vmin, uint16_t vampl, uint8_t waveType, uint16_
  * 	1 = OK
  * 	0 = Error.
 */
-	uint16_t _vmin = vmin;
+	uint16_t _vmin  = vmin;
 	uint16_t _vampl = vampl;
 	uint16_t _v_min, _v_max;
 
-	if (_vmin > BIOZAP_VMIN_MAX) _vmin = BIOZAP_VMIN_MAX;
-	if (_vmin + _vampl > BIOZAP_VMAX_MAX) _vampl = BIOZAP_VMAX_MAX - _vmin;
-
+	if ( _vmin > BIOZAP_VMIN_MAX)           _vmin  = BIOZAP_VMIN_MAX;
+	if ( _vmin + _vampl > BIOZAP_VMAX_MAX ) _vampl = BIOZAP_VMAX_MAX - _vmin;
 
 	_v_min = BIOZAP_ONE_VOLT * _vmin / 100.0;
 	_v_max = _v_min + BIOZAP_ONE_VOLT * _vampl / 100.0;
@@ -84,11 +83,10 @@ static uint8_t generate_sin_sample(uint16_t v_min, uint16_t v_max , uint16_t *sa
 
 	float step = 2*PI / BIOZAP_SAMPLE_SIZE;
 
-	if ( (v_max>4095) || (v_min>=v_max)) return 0;
+	if ( (v_max>4095) || (v_min>=v_max) ) return 0;
 
 	for (int i=0; i < BIOZAP_SAMPLE_SIZE; i++ ){
 		sample_array[i] = ( sin(i*step) + 1) * (v_max-v_min)/2.0 + v_min ;
-		//bioZAP_SampleArray[i] = ( sin(i*step) + 1) * (v_max-v_min)/2.0 + v_min ;
 
 	}
 
@@ -127,7 +125,7 @@ static uint8_t generate_rec_sample (uint16_t v_min, uint16_t v_max, uint16_t *sa
 
 	for (int i=0; i < BIOZAP_SAMPLE_SIZE; i++ ){
 
-		if ( i < BIOZAP_SAMPLE_SIZE * bioZAP_DutyCycle / 100.0 ){
+		if ( i < BIOZAP_SAMPLE_SIZE * BIOZAP_DutyCycle / 100.0 ){
 			sample_array[i] = v_min;
 		} else {
 			sample_array[i] = v_max;

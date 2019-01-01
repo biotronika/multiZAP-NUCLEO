@@ -126,9 +126,9 @@ int main(void)
   HAL_TIM_Base_Start(&htim6);
   HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
 
-  generate_sample(50, 200, BIOZAP_SIN, bioZAP_SampleArray);
+  generate_sample(50, 200, BIOZAP_SIN, BIOZAP_SampleArray);
 
-  HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t*)bioZAP_SampleArray, 512, DAC_ALIGN_12B_R);
+  HAL_DAC_Start_DMA(&hdac1, DAC_CHANNEL_1, (uint32_t*)BIOZAP_SampleArray, 512, DAC_ALIGN_12B_R);
 
   /* USER CODE END 2 */
 
